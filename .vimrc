@@ -1,10 +1,22 @@
+" Automatically set up Vundle
+" Props to https://erikzaadi.com/2012/03/19/auto-installing-vundle-from-your-vimrc/
+let iCanHazVundle=1
+let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
+if !filereadable(vundle_readme) 
+    echo "Installing Vundle.."
+    echo ""
+    silent !mkdir -p ~/.vim/bundle
+    silent !git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
+    let iCanHazVundle=0
+endif
+
 set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-Plugin 'gmarik/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
 
 " tmux <3
 Plugin 'christoomey/vim-tmux-navigator'
@@ -21,12 +33,9 @@ Plugin 'vim-syntastic/syntastic'
 
 Plugin 'nvie/vim-flake8'
 
-Plugin 'jnurmine/Zenburn'
-
+" NERDTree
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
-
-Plugin 'kien/ctrlp.vim'
 
 Plugin 'tpope/vim-fugitive'
 
@@ -38,12 +47,18 @@ Plugin 'junegunn/fzf.vim'
 
 Plugin 'pangloss/vim-javascript'
 
-Plugin 'python-mode/python-mode'
+Plugin 'davidhalter/jedi-vim'
 
 Plugin 'cocopon/iceberg.vim'
 Plugin 'gkeep/iceberg-dark'
 
+if iCanHazVundle == 0
+        echo "Installing Vundles, please ignore key map error messages"
+        echo ""
+        :PluginInstall
+    endif
 call vundle#end()
+
 filetype plugin indent on
 
 let mapleader=" "
@@ -81,6 +96,15 @@ set t_Co=256
 let python_highlight_all=1
 syntax on
 
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = { 'passive_filetypes': ['python'] } " waaay too slow for python
 
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 
